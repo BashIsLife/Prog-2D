@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Drapeau de l'Angleterre par Louis-Philippe Caron</title>
+    <link rel="stylesheet" type="text/css" href="StyleLabo4.css" />
+
+
+    <!-- Code JavaScript local -->
+    <script type="text/javascript">
+        // Declaration Global
+        var objCanvas = null;
+        var objC2D = null;
+        var intX = null;
+        var intY = null;
+        var intXSouris = null;
+        var intYSouris = null;
+
+        // efface le Canvas
+        function effacerDessin() {
+            objC2D.clearRect(0, 0, objCanvas.width, objCanvas.height);
+        }
+
+        function initDessiner() {
+            objCanvas = document.getElementById('monCanvas');
+            objC2D = objCanvas.getContext('2d');
+            intX = objCanvas.width / 2;
+            intY = objCanvas.height / 2;
+            dessiner();
+        }
+
+        function dessiner() {
+            objC2D.save();
+
+            // Texte Union Jack
+            objC2D.font = "200px Fantasy";
+            objC2D.textAlign = 'center';
+            objC2D.fillText("Union", intX, intY - 15);
+            objC2D.fillText("Jack", intX, intY + 140);
+            objC2D.globalCompositeOperation = 'source-atop';
+
+            // Rectangle bleu
+            objC2D.beginPath();
+            objC2D.fillStyle = '#002699';
+            objC2D.fillRect(0, 0, 640, 320);
+
+            // X blanc
+            objC2D.beginPath();
+            objC2D.strokeStyle = 'white';
+            objC2D.lineWidth = 60;
+            objC2D.moveTo(0, 0);
+            objC2D.lineTo(640, 320);
+            objC2D.moveTo(640, 0);
+            objC2D.lineTo(0, 320);
+            objC2D.stroke();
+
+            // X rouge
+            objC2D.beginPath();
+            objC2D.strokeStyle = 'red';
+            objC2D.lineWidth = 20;
+
+            objC2D.moveTo(-20, 0);
+            objC2D.lineTo(320, 170);
+
+            objC2D.moveTo(650, -15);
+            objC2D.lineTo(320, 150);
+
+            objC2D.moveTo(0, 330);
+            objC2D.lineTo(320, 170);
+
+            objC2D.moveTo(660, 320);
+            objC2D.lineTo(320, 150);
+            objC2D.stroke();
+
+            // Croix blanche
+            objC2D.beginPath();
+            objC2D.strokeStyle = 'white';
+            objC2D.lineWidth = 100;
+            objC2D.moveTo(320, 0);
+            objC2D.lineTo(320, 320);
+            objC2D.moveTo(0, 160);
+            objC2D.lineTo(640, 160);
+            objC2D.stroke();
+
+            // Croix rouge
+            objC2D.beginPath();
+            objC2D.strokeStyle = 'red';
+            objC2D.lineWidth = 60;
+            objC2D.moveTo(320, 0);
+            objC2D.lineTo(320, 320);
+            objC2D.moveTo(0, 160);
+            objC2D.lineTo(640, 160);
+            objC2D.stroke();
+
+            // Encadré
+            objC2D.beginPath();
+            objC2D.strokeStyle = 'black';
+            objC2D.lineWidth = '2';
+            objC2D.strokeRect(0, 0, 640, 320);
+
+            objC2D.restore();
+
+        }
+
+        function prendreTexte() {
+            // La position de la souris par rapport au canevas
+            const objElemRect = event.target.getBoundingClientRect();
+            intXSouris = event.clientX - objElemRect.left;
+            intYSouris = event.clientY - objElemRect.top;
+
+            effacerDessin();
+            dessiner();
+
+            // Le fantôme est une image transparente 
+            const objImage = document.getElementById('imgTransparent');
+            event.dataTransfer.setDragImage(objImage, 0, 0);
+
+        }
+        function glisserTexte() {
+            event.preventDefault(); // Permettre le dépôt
+
+            // Calculer la distance (x,y) entre l'ancienne 
+            // postion de la souris et la nouvelle
+            const objElemRect = event.target.getBoundingClientRect();
+            const intXSouris2 = event.clientX - objElemRect.left;
+            const intYSouris2 = event.clientY - objElemRect.top;
+            // La distance entre l'ancienne position de la souris
+            // et sa position actuelle
+            const intDistanceX = intXSouris2 - intXSouris;
+            const intDistanceY = intYSouris2 - intYSouris;
+
+            // La nouvelle position du cercle
+            intX += intDistanceX; intY += intDistanceY;
+            // Redesssiner (avec ombrage)
+            effacerDessin(); binCercleGlisse = true; dessiner();
+            intXSouris = intXSouris2; intYSouris = intYSouris2;
+        }
+        function deposerTexte() {
+            effacerDessin();
+            dessiner();
+        }
+
+
+    </script>
+</head>
+
+<body onload="initDessiner()">
+    <header class="sTexteCentre sLargeurDiv sEntete">
+        <p>
+            <span class="sTitreApp">
+                Drapeau de l'Angleterre<br />
+            </span> par
+            <span class="sAuteurApp">
+                Louis-Philippe Caron
+            </span>
+        </p>
+    </header>
+
+    <main class="sLargeurDiv sCorps">
+        <canvas id="monCanvas" width="640" height="320" tabindex="1" draggable="true" ondragstart="prendreTexte()"
+            ondragover="glisserTexte()" ondrop="deposerTexte()">
+            Votre navigateur ne supporte pas la balise canvas
+        </canvas>
+        <img id="imgTransparent" src="Transparent.gif" alt="Transparent" />
+    </main>
+
+    <footer class="sLargeurDiv sPiedDePage">
+        <p>
+            <a href="http://www.cgodin.qc.ca">
+                <img src="logoCGG.jpg" alt="logoCGG" />
+            </a>
+            <a href="http://www.cgodin.qc.ca/programme/techniques-informatique/">
+                Département d'informatique du Cégep Gérald-Godin
+            </a>
+            <br />
+            &copy; 2021
+        </p>
+    </footer>
+</body>
+
+</html>

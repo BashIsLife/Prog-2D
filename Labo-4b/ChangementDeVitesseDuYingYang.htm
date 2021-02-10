@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Yin Yang 2020">
+	<title>Rotation et changement de vitesse du Yin Yang par Louis-Philippe Caron</title>
+	<link rel="stylesheet" type="text/css" href="StyleLabo4.css" />
+
+	<!-- Code JavaScript local -->
+	<script type="text/javascript">
+		const initAnimation = () => {
+			function animer() {
+				// Requête pour le prochain cycle
+				objCycleAnimation = requestAnimationFrame(animer);
+
+				// Le cycle d'animation
+				effacerDessin();
+				mettreAJourAnimation();
+				dessiner(xPos);
+			}
+
+			// Efface tout sur le Canvas
+			function effacerDessin() {
+				objC2D.clearRect(0, 0, objCanvas.width, objCanvas.height);
+			}
+
+			function mettreAJourAnimation() {
+				fltAngleRotation += Math.PI / 180 * vitesse;
+
+				xPos += vitesse;
+
+				if (xPos >= 960) {
+					xPos = objCanvas.width / 2;
+				}
+				dessiner(xPos - 640);
+
+			}
+
+			function arreterAnimation() {
+				if (objCycleAnimation != null)
+					cancelAnimationFrame(objCycleAnimation);
+				objCycleAnimation = null;
+			}
+
+			// Dessine Le Yin Yang
+			function dessiner(xPos) {
+				this.xPos = xPos;
+				objC2D.save();
+
+				const fltMilieu = objCanvas.width / 2;
+				const fltQuart = objCanvas.width / 4
+				const fltVingtieme = objCanvas.width / 20
+
+				// Déplacer le contexte au centre du canevas
+				objC2D.translate(xPos, fltMilieu);
+
+				// Rotate le dessin
+				objC2D.rotate(fltAngleRotation);
+
+				// Dessiner le symbole Yin Yang
+				objC2D.fillStyle = 'yellow';
+				objC2D.beginPath();
+				objC2D.arc(0, 0, fltMilieu, Math.PI / 2, 3 * Math.PI / 2, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'black';
+				objC2D.beginPath();
+				objC2D.arc(0, 0, fltMilieu, Math.PI / 2, 3 * Math.PI / 2, true);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'yellow';
+				objC2D.beginPath();
+				objC2D.arc(0, -fltQuart, fltQuart, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'black';
+				objC2D.beginPath();
+				objC2D.arc(0, fltQuart, fltQuart, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'black';
+				objC2D.beginPath();
+				objC2D.arc(0, -fltQuart, fltVingtieme, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'yellow';
+				objC2D.beginPath();
+				objC2D.arc(0, fltQuart, fltVingtieme, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.restore();
+			}
+
+			
+
+			const objCanvas = document.getElementById('monCanvas')
+			objCanvas.focus();
+			const objC2D = objCanvas.getContext('2d')
+			var xPos = objCanvas.width / 2;
+			let objCycleAnimation = null;
+			let fltAngleRotation = 0;
+			
+			dessiner(); // Dessiner une première fois
+			animer();  // Démarrer l'animation
+		}
+		var vitesse = 0;
+		function gererClavier() {
+				switch (event.keyCode) {
+					case 107:
+						if (vitesse < 10) {
+							vitesse += 0.5;
+						}
+						break;
+					case 109:
+						if (vitesse > 0) {
+							vitesse -= 0.5;
+						}
+						break;
+				}
+				console.log(vitesse)
+			}
+	</script>
+</head>
+
+<body onload="initAnimation()">
+
+	<header class="sTexteCentre sLargeurDiv sEntete">
+		<p>
+			<span class="sTitreApp">
+				Rotation et changement de vitesse du Yin Yang<br />
+			</span> par
+			<span class="sAuteurApp">
+				Louis-Philippe Caron
+			</span>
+		</p>
+	</header>
+
+	<main class="sLargeurDiv sCorps">
+		<canvas id="monCanvas" width="640" height="640" tabindex="1" onkeyup="gererClavier()">
+			Votre navigateur ne supporte pas la balise canvas
+		</canvas>
+	</main>
+
+	<footer class="sLargeurDiv sPiedDePage">
+		<p>
+			<a href="http://www.cgodin.qc.ca">
+				<img src="logoCGG.jpg" alt="logoCGG" />
+			</a>
+			<a href="http://www.cgodin.qc.ca/programme/techniques-informatique/">
+				Département d'informatique du Cégep Gérald-Godin
+			</a>
+			<br />
+			&copy; 2021
+		</p>
+	</footer>
+</body>
+
+</html>
