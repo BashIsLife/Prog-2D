@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Yin Yang 2020">
+	<title>Rotation et retournement du Yin Yang par Louis-Philippe Caron</title>
+	<link rel="stylesheet" type="text/css" href="StyleLabo4.css" />
+
+	<!-- Code JavaScript local -->
+	<script type="text/javascript">
+		const initAnimation = () => {
+			function animer() {
+				// Requête pour le prochain cycle
+				objCycleAnimation = requestAnimationFrame(animer);
+
+				// Le cycle d'animation
+				effacerDessin();
+				mettreAJourAnimation();
+				dessiner();
+			}
+
+			// Efface tout sur le Canvas
+			function effacerDessin() {
+				objC2D.clearRect(0, 0, objCanvas.width, objCanvas.height);
+			}
+
+			function mettreAJourAnimation() {	
+				fltAngleRotation += Math.PI / 180;
+				
+				if(test == 1){
+					Xscale -= 1/180;
+					if(Xscale <= -1)
+					test = 0;
+				}
+				if(test == 0){
+					Xscale += 1/180;
+					if(Xscale >= 1)
+					test = 1;
+				}
+				console.log(Xscale,test)
+
+			}
+
+			function arreterAnimation() {
+				if (objCycleAnimation != null)
+					cancelAnimationFrame(objCycleAnimation);
+				objCycleAnimation = null;
+			}
+
+			// Dessine Le Yin Yang
+			function dessiner() {
+				objC2D.save();
+
+				const fltMilieu = objCanvas.width / 2;
+				const fltQuart = objCanvas.width / 4
+				const fltVingtieme = objCanvas.width / 20
+
+				// Déplacer le contexte au centre du canevas
+				objC2D.translate(fltMilieu, fltMilieu);
+
+				// Rotate le dessin
+				objC2D.scale(Xscale, Yscale);
+			    objC2D.rotate(fltAngleRotation);
+				
+
+				// Dessiner le symbole Yin Yang
+				objC2D.fillStyle = 'yellow';
+				objC2D.beginPath();
+				objC2D.arc(0, 0, fltMilieu, Math.PI / 2, 3 * Math.PI / 2, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'black';
+				objC2D.beginPath();
+				objC2D.arc(0, 0, fltMilieu, Math.PI / 2, 3 * Math.PI / 2, true);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'yellow';
+				objC2D.beginPath();
+				objC2D.arc(0, -fltQuart, fltQuart, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'black';
+				objC2D.beginPath();
+				objC2D.arc(0, fltQuart, fltQuart, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'black';
+				objC2D.beginPath();
+				objC2D.arc(0, -fltQuart, fltVingtieme, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+
+				objC2D.fillStyle = 'yellow';
+				objC2D.beginPath();
+				objC2D.arc(0, fltQuart, fltVingtieme, 0, 2 * Math.PI, false);
+				objC2D.closePath();
+				objC2D.fill();
+				
+
+				objC2D.restore();
+			}
+
+			const objCanvas = document.getElementById('monCanvas')
+			const objC2D = objCanvas.getContext('2d')
+			let objCycleAnimation = null;
+			let fltAngleRotation = 0;
+			let Xscale = 1;
+			let Yscale = 1;
+			let test = 1;
+			dessiner(); // Dessiner une première fois
+			animer();  // Démarrer l'animation
+		}
+	</script>
+</head>
+
+<body onload="initAnimation()">
+
+	<header class="sTexteCentre sLargeurDiv sEntete">
+		<p>
+			<span class="sTitreApp">
+				Rotation et retournement du Yin Yang<br />
+			</span> par
+			<span class="sAuteurApp">
+				Louis-Philippe Caron
+			</span>
+		</p>
+	</header>
+
+	<main class="sLargeurDiv sCorps">
+		<canvas id="monCanvas" width="640" height="640">
+			Votre navigateur ne supporte pas la balise canvas
+		</canvas>
+	</main>
+
+	<footer class="sLargeurDiv sPiedDePage">
+		<p>
+			<a href="http://www.cgodin.qc.ca">
+				<img src="logoCGG.jpg" alt="logoCGG" />
+			</a>
+			<a href="http://www.cgodin.qc.ca/programme/techniques-informatique/">
+				Département d'informatique du Cégep Gérald-Godin
+			</a>
+			<br />
+			&copy; 2021
+		</p>
+	</footer>
+</body>
+
+</html>
