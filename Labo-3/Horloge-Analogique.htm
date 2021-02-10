@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Horloge 2021">
+
+    <title>Horloge analogique par Louis-Philippe Caron</title>
+    <link rel="stylesheet" type="text/css" href="StyleLabo3.css" />
+
+    <!-- Code JavaScript local -->
+    <script type="text/javascript">
+        const dessinerHorloge = () => {
+            var objCanvas = document.getElementById("monCanvas");
+            var objC2D = objCanvas.getContext("2d");
+
+            var radius = 300;
+            objC2D.translate(320, 320);
+            // Image de font
+            var objBackground = new Image();
+            objBackground.src = "KI5Z7EH68HEA1589910860503.jpg";
+            objBackground.onload = () => {
+                // 1er cercle
+                objC2D.save();
+                objC2D.beginPath();
+                objC2D.arc(0, 0, 315, 0, 2 * Math.PI, false);
+                objC2D.strokeStyle = 'black';
+                objC2D.lineWidth = 4;
+                objC2D.stroke();
+                objC2D.clip();
+                objC2D.translate(-320, -320);
+                objC2D.drawImage(objBackground, 0, 0);
+                objC2D.restore();
+
+                // 2eme cercle blanc 
+                objC2D.beginPath();
+                objC2D.arc(0, 0, 290, 0, 2 * Math.PI, false);
+                objC2D.fillStyle = 'white';
+                objC2D.fill();
+                objC2D.strokeStyle = 'black';
+                objC2D.lineWidth = 2;
+                objC2D.stroke();     
+
+                // 3eme cercle 
+                objC2D.save();
+                objC2D.beginPath();
+                objC2D.arc(0, 0, 210, 0, 2 * Math.PI, false);
+                objC2D.strokeStyle = 'black';
+                objC2D.lineWidth = 4;
+                objC2D.stroke();
+                objC2D.clip();
+                objC2D.translate(-320, -320);
+                objC2D.drawImage(objBackground, 0, 0);
+                objC2D.restore();
+
+                // rectangle Nom
+                objC2D.fillStytle = 'white';
+                objC2D.fillRect(-50, 60, 100, 20);
+                objC2D.fillStyle = 'black';
+                objC2D.font = '20px arial';
+                objC2D.textAlign = 'center';
+                objC2D.fillText('27/1/2021', -0, 78);
+
+                // rectangle temps
+                objC2D.fillStyle = 'white';
+                objC2D.fillRect(-50, 100, 100, 20);
+                objC2D.fillStyle = 'black';
+                objC2D.font = '20px arial';
+                objC2D.textAlign = 'center';
+                objC2D.fillText('10:10:00', -0, 118);
+
+
+
+                // Dot noire
+                objC2D.beginPath();
+                objC2D.arc(0, 0, 20, 0, 2 * Math.PI);
+                objC2D.fillStyle = 'black';
+                objC2D.fill();
+
+                // 60 lines 12 grasses
+                objC2D.save();
+
+                objC2D.fillStyle = 'black';
+                for (let i = 0; i < 60; i++) {
+                    objC2D.rotate(Math.PI / 30);
+                    if ((i + 1) % 5 == 0) {
+                        objC2D.beginPath();
+                        objC2D.fillStyle = 'black';
+                        objC2D.moveTo(0, 210);
+                        objC2D.lineTo(5, 210);
+                        objC2D.lineTo(5, 220);
+                        objC2D.lineTo(-5, 220);
+                        objC2D.lineTo(-5, 210);
+                        objC2D.closePath();
+                        objC2D.fill();
+                    }
+                    else {
+                        objC2D.beginPath();
+                        objC2D.fillStyle = 'black';
+                        objC2D.moveTo(0, 210);
+                        objC2D.lineTo(1, 210);
+                        objC2D.lineTo(1, 220);
+                        objC2D.lineTo(-1, 220);
+                        objC2D.lineTo(-1, 210);
+                        objC2D.closePath();
+                        objC2D.fill();
+                    }
+
+                }
+                dessinNumeros(objC2D, radius);
+                dessinTemps(objC2D, radius);
+            }
+
+            function dessinNumeros(objC2D, radius) {
+                var ang;
+                objC2D.font = "45px arial";
+                objC2D.textBaseline = "middle";
+                objC2D.textAlign = "center";
+                var tabChiffres = ['XII', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
+                for (var i = 0; i < 12; i++) {
+                    ang = i * Math.PI / 6;
+                    objC2D.rotate(ang);
+                    objC2D.translate(0, -radius * 0.85);
+                    objC2D.rotate(-ang);
+                    objC2D.fillText(tabChiffres[i], 0, 0);
+                    objC2D.rotate(ang);
+                    objC2D.translate(0, radius * 0.85);
+                    objC2D.rotate(-ang);
+                }
+            }
+
+            function dessinTemps(objC2D, radius) {
+                // heure
+                var heure = 10;
+                var minute = 10;
+                var seconde = 0;
+                heure = heure % 12;
+                heure = (heure * Math.PI / 6) +
+                    (minute * Math.PI / (6 * 60)) +
+                    (seconde * Math.PI / (360 * 60));
+                dessinAiguilles(objC2D, heure, radius * 0.5, radius * 0.03);
+                // minute
+                minute = (minute * Math.PI / 30) + (seconde * Math.PI / (30 * 60));
+                dessinAiguilles(objC2D, minute, radius * 0.8, radius * 0.03);
+                // seconde
+                seconde = (seconde * Math.PI / 30);
+                dessinAiguilles(objC2D, seconde, radius * 0.9, radius * 0.01);
+            }
+
+            function dessinAiguilles(objC2D, pos, length, width) {
+                objC2D.beginPath();
+                objC2D.lineWidth = width;
+                objC2D.lineCap = "round";
+                objC2D.moveTo(0, 0);
+                objC2D.rotate(pos);
+                objC2D.lineTo(0, -length);
+                objC2D.stroke();
+                objC2D.rotate(-pos);
+            }
+
+        }
+    </script>
+</head>
+
+<body onload="dessinerHorloge()">
+    <header class="sTexteCentre sLargeurDiv sEntete">
+        <p>
+            <span class="sTitreApp">
+                Horloge analogique<br />
+            </span> par
+            <span class="sAuteurApp">
+                Louis-Philippe Caron
+            </span>
+        </p>
+    </header>
+
+    <main class="sLargeurDiv sCorps">
+        <canvas id="monCanvas" width="640" height="640">
+            Votre navigateur ne supporte pas la balise canvas
+        </canvas>
+    </main>
+
+    <footer class="sLargeurDiv sPiedDePage">
+        <p>
+            <a href="http://www.cgodin.qc.ca">
+                <img src="logoCGG.jpg" alt="logoCGG" />
+            </a>
+            <a href="http://www.cgodin.qc.ca/programme/techniques-informatique/">
+                Département d'informatique du Cégep Gérald-Godin
+            </a>
+            <br />
+            &copy; 2021
+        </p>
+    </footer>
+</body>
+
+</html>
