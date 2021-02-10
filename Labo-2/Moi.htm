@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Moi par Louis-Philippe Caron</title>
+    <link rel="stylesheet" type="text/css" href="StyleLabo1.css" />
+
+
+    <!-- Code JavaScript local -->
+    <script type="text/javascript">
+        const dessiner = () => {
+            const objCanvas = document.getElementById('monCanvas');
+            const objC2D = objCanvas.getContext('2d');
+
+            // Image de fond
+            var imgFond = new Image();
+            imgFond.src = "windows_69-wallpaper-3554x1999.jpg";
+            imgFond.alpha = 50;
+            imgFond.onload = () => {
+                objC2D.globalAlpha = 0.5;
+                objC2D.drawImage(imgFond, 0, 0);
+                DessineNom();
+            }
+
+            // Dessine le Nom avec le motif, l'encadre et met un effet d'ombrage
+            function DessineNom() {
+                var strTxt = 'sLouidfdfs';
+                objC2D.font = '80px Arial';
+                var objImage = new Image();
+                objImage.src = 'motif.jpg';
+                objImage.onload = () => {
+                    // ombrage
+                    objC2D.shadowColor = 'black';
+                    objC2D.shadowBlur = 6;
+                    objC2D.shadowOffsetX = 12;
+                    objC2D.shadowOffsetY = 7;
+
+                    // Dessin du nom
+                    objC2D.globalAlpha = 1;
+                    var objMotif = objC2D.createPattern(objImage, 'repeat');
+                    objC2D.fillStyle = objMotif;
+                    objC2D.strokeStyle = 'black';
+                    objC2D.textAlign = 'center';
+                    objC2D.fillText(strTxt, objCanvas.clientWidth / 2, objCanvas.clientHeight / 2);
+                    objC2D.strokeText(strTxt, objCanvas.clientWidth / 2, objCanvas.clientHeight / 2)
+
+                    // Les lignes pointillé
+                    objC2D.beginPath();
+                    objC2D.strokeStyle = 'black';
+                    objC2D.strokeWidth = 10;
+                    objC2D.setLineDash([3, 1, 1, 1]);
+                    var departX = (objCanvas.clientWidth / 2) - (objC2D.measureText(strTxt).width / 2);
+                    var departY = objCanvas.clientHeight / 2 - (150 / 2);
+                    objC2D.moveTo(departX, departY);
+                    objC2D.strokeRect(departX, departY, objC2D.measureText(strTxt).width, 100);
+                    objC2D.stroke();
+                }
+
+            }
+
+        }
+    </script>
+</head>
+
+<body onload="dessiner()">
+
+    <header class="sTexteCentre sLargeurDiv sEntete">
+        <p>
+            <span class="sTitreApp">
+                Moi<br />
+            </span> par
+            <span class="sAuteurApp">
+                Louis-Philippe Caron
+            </span>
+        </p>
+    </header>
+
+    <main class="sLargeurDiv sCorps">
+        <canvas id="monCanvas" width="640" height="320">
+            Votre navigateur ne supporte pas la balise canvas
+        </canvas>
+    </main>
+
+    <footer class="sLargeurDiv sPiedDePage">
+        <p>
+            <a href="http://www.cgodin.qc.ca">
+                <img src="logoCGG.jpg" alt="logoCGG" />
+            </a>
+            <a href="http://www.cgodin.qc.ca/programme/techniques-informatique/">
+                Département d'informatique du Cégep Gérald-Godin
+            </a>
+            <br />
+            &copy; 2021
+        </p>
+    </footer>
+</body>
+
+</html>

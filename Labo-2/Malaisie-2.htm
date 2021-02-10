@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Drapeau de la Malaisie par Louis-Philippe Caron</title>
+    <link rel="stylesheet" type="text/css" href="StyleLabo5.css" />
+
+
+    <!-- Code JavaScript local -->
+    <script type="text/javascript">
+        const dessiner = () => {
+            const objCanvas = document.getElementById('monCanvas');
+            const objC2D = objCanvas.getContext('2d');
+           
+            objC2D.save();
+
+           //Découpage du mot
+            objC2D.beginPath();
+            objC2D.translate(objCanvas.clientWidth / 2, objCanvas.clientHeight / 2);
+            objC2D.rotate(Math.PI / 6)
+            objC2D.translate(-objCanvas.clientWidth / 2, -objCanvas.clientHeight / 2);
+            objC2D.font = '180px Fantasy';
+            objC2D.textAlign = 'center';
+            objC2D.fillStyle = 'black';
+            objC2D.fillText("MALAISIE", objCanvas.clientWidth / 2, (objCanvas.clientHeight / 2) + 70);
+
+           objC2D.restore();
+
+           objC2D.globalCompositeOperation = 'source-atop';
+            // Lignes rouges et blanche
+            var y = 0;
+            for (var i = 0; i < 14; i++) {
+                if (i % 2 == 0) {
+                    objC2D.beginPath();
+                    objC2D.fillStyle = 'red';
+                    objC2D.fillRect(0, y, 640, 30);
+                }
+                else {
+                    objC2D.beginPath();
+                    objC2D.fillStyle = 'black';
+                    objC2D.fillRect(0, y, 640, 30);
+                }
+                y += 30;
+            }
+
+            // Rectangle bleu
+            objC2D.beginPath();
+            objC2D.fillStyle = 'blue';
+            objC2D.fillRect(0, 0, 320, 240);
+
+            // Demi-lune
+            objC2D.beginPath();
+            objC2D.fillStyle = 'yellow';
+            objC2D.arc(130, 120, 90, 0, 2 * Math.PI, false);
+            objC2D.fill();
+
+            objC2D.beginPath();
+            objC2D.fillStyle = 'blue';
+            objC2D.arc(150, 120, 80, 0, 2 * Math.PI, false);
+            objC2D.fill();
+
+            //Étoile
+            objC2D.translate(220, 120);
+            for (var i = 0; i < 14; i++) {
+                objC2D.rotate(Math.PI / 7)
+                objC2D.beginPath();
+                objC2D.fillStyle = 'yellow';
+                objC2D.moveTo(0, 0);
+                objC2D.lineTo(10, 0);
+                objC2D.lineTo(0, 80);
+                objC2D.lineTo(-10, 0)
+                objC2D.closePath();
+                objC2D.fill();
+            }
+            
+              
+        }
+    </script>
+</head>
+
+<body onload="dessiner()">
+
+    <header class="sTexteCentre sLargeurDiv sEntete">
+        <p>
+            <span class="sTitreApp">
+                Drapeau de la Malaisie<br />
+            </span> par
+            <span class="sAuteurApp">
+                Louis-Philippe Caron
+            </span>
+        </p>
+    </header>
+
+    <main class="sLargeurDiv sCorps">
+        <canvas id="monCanvas" width="640" height="420">
+            Votre navigateur ne supporte pas la balise canvas
+        </canvas>
+    </main>
+
+    <footer class="sLargeurDiv sPiedDePage">
+        <p>
+            <a href="http://www.cgodin.qc.ca">
+                <img src="logoCGG.jpg" alt="logoCGG" />
+            </a>
+            <a href="http://www.cgodin.qc.ca/programme/techniques-informatique/">
+                Département d'informatique du Cégep Gérald-Godin
+            </a>
+            <br />
+            &copy; 2021
+        </p>
+    </footer>
+</body>
+
+</html>

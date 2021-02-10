@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Superman au négatif par Louis-Philippe Caron</title>
+    <link rel="stylesheet" href="StyleLabo5.css" />
+
+
+    <!-- Code JavaScript local -->
+    <script type="text/javascript">
+        const dessiner = () => {
+            const objCanvas = document.getElementById('monCanvas');
+            const objC2D = objCanvas.getContext('2d');
+
+            const objImage = new Image();   // Créer l’image
+            objImage.src = 'superman.jpg';  // Le fichier
+            objImage.onload = function () {
+                // Dessiner l'image originale
+                objC2D.drawImage(objImage, 10, 10);
+
+                // Aller chercher l’image dessinée
+                const imgData = objC2D.getImageData(10, 10, objImage.width, objImage.height);
+
+                // Parcourir le tableau d’octets
+                for (let i = 0; i < imgData.data.length; i += 4) {
+                    imgData.data[i] = 255 - imgData.data[i];
+                    imgData.data[i+1] = 255 - imgData.data[i+1];
+                    imgData.data[i+2] = 255 - imgData.data[i+2];
+                    imgData.data[i+3] = 255;
+                }
+
+                // Redessiner l'image transformée
+                objC2D.putImageData(imgData, 10, 20 + objImage.height);
+            }
+        }         
+    </script>
+</head>
+
+<body onload="dessiner()">
+
+    <header class="sTexteCentre sLargeurDiv sEntete">
+        <p>
+            <span class="sTitreApp">
+                Superman au négatif<br />
+            </span> par
+            <span class="sAuteurApp">
+                Louis-Philippe Caron
+            </span>
+        </p>
+    </header>
+
+    <main class="sLargeurDiv sCorps">
+        <canvas id="monCanvas" width="640" height="390">
+            Votre navigateur ne supporte pas la balise canvas
+        </canvas>
+    </main>
+
+    <footer class="sLargeurDiv sPiedDePage">
+        <p>
+            <a href="http://www.cgodin.qc.ca">
+                <img src="logoCGG.jpg" alt="logoCGG" />
+            </a>
+            <a href="http://www.cgodin.qc.ca/programme/techniques-informatique/">
+                Département d'informatique du Cégep Gérald-Godin
+            </a>
+            <br />
+            &copy; 2021
+        </p>
+    </footer>
+</body>
+
+</html>
